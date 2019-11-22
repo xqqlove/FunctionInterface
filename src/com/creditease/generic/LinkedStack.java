@@ -1,5 +1,7 @@
 package com.creditease.generic;
 
+import java.util.function.Supplier;
+
 public class LinkedStack<T> {
     private static class Node<U>{
         U item;
