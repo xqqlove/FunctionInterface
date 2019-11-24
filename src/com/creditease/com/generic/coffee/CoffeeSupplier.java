@@ -3,6 +3,7 @@ package com.creditease.com.generic.coffee;
 import java.util.*;
 import java.util.Random;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 public class CoffeeSupplier implements Supplier<Coffee> ,Iterable<Coffee> {
 
@@ -14,7 +15,11 @@ public class CoffeeSupplier implements Supplier<Coffee> ,Iterable<Coffee> {
 
     @Override
     public Coffee get() {
-      return null;
+        try {
+            return (Coffee) type[rand.nextInt(type.length)].newInstance();
+        } catch (InstantiationException |IllegalAccessException  e) {
+           throw new RuntimeException(e);
+        }
     }
 
 
@@ -25,17 +30,18 @@ public class CoffeeSupplier implements Supplier<Coffee> ,Iterable<Coffee> {
 
         @Override
         public boolean hasNext() {
-            return false;
+            return count>0;
         }
 
         @Override
         public Coffee next() {
-            return null;
+            count--;
+            return CoffeeSupplier.this.get();
         }
 
         @Override
         public void remove() {
-
+               throw new UnsupportedOperationException();
         }
     }
     @Override
@@ -43,6 +49,14 @@ public class CoffeeSupplier implements Supplier<Coffee> ,Iterable<Coffee> {
         return new CofferIterator();
     }
     public static void main(String[] args) {
+//        Stream.generate(new CoffeeSupplier()).limit(5).forEach(System.out::print);
+        for (Coffee c:new CoffeeSupplier(5)){
+            System.out.println(c);
+        }
+        for (int i=0;i<5;i++){
 
+        }
+        CoffeeSupplier coffees=new CoffeeSupplier();
+        System.out.println("接口"+coffees);
     }
 }
